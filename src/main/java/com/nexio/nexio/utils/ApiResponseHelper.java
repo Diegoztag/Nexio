@@ -19,7 +19,6 @@ public class ApiResponseHelper {
                         .timestamp(LocalDateTime.now())
                         .build());
     }
-
     public static <T> ResponseEntity <ApiResponseDto<T>> notFound(String message, List<String> errors, String path) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(
@@ -58,4 +57,18 @@ public class ApiResponseHelper {
                                 .timestamp(LocalDateTime.now())
                                 .build());
     }
+
+    public static ResponseEntity<ApiResponseDto<Void>> validationError(String message, List<String> errors, String path) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        ApiResponseDto.<Void>builder()
+                                .message(message)
+                                .codeHttp((long) HttpStatus.BAD_REQUEST.value())
+                                .descriptionHttp(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                                .errors(errors)
+                                .path(path)
+                                .timestamp(LocalDateTime.now())
+                                .build());
+    }
+
 }
