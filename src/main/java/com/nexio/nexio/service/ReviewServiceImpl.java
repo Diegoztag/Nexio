@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,14 +69,41 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDto> getReviewsByBusinessId(Long businessId) {
-        List<Review> reviews = reviewRepository.findByBusinessId(businessId);
+    public List<ReviewDto> getReviewsByBusinessId(Long businessId, String filter) {
+        List<Review> reviews = null;
+
+        //filtros
+        switch (filter) {
+            case "newest":
+                reviews = reviewRepository.findByBusinessIdOrderByCreatedAtDesc(businessId);
+                break;
+            case "oldest":
+                reviews = reviewRepository.findByBusinessIdOrderByCreatedAtAsc(businessId);
+                break;
+            default:
+                reviews = reviewRepository.findByBusinessId(businessId);
+                break;
+        }
+
         return reviews.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ReviewDto> getReviewsByUserId(Long userId) {
-        List<Review> reviews = reviewRepository.findByUserId(userId);
+    public List<ReviewDto> getReviewsByUserId(Long userId, String filter) {
+        List<Review> reviews = null;
+
+        // filtros
+        switch(filter) {
+            case "newest":
+                reviews = reviewRepository.findByUserIdOrderByCreatedAtDesc(userId);
+                break;
+            case "oldest":
+                reviews = reviewRepository.findByUserIdOrderByCreatedAtAsc(userId);
+                break;
+            default:
+                reviews = reviewRepository.findByUserId(userId);
+        }
+
         return reviews.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 

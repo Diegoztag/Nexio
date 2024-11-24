@@ -53,8 +53,8 @@ public class ReviewController {
 
     // Obtener todas las reseñas de un negocio
     @GetMapping("/business/{businessId}")
-    public ResponseEntity<ApiResponseDto<List<ReviewDto>>> getReviewsByBusinessId(@PathVariable Long businessId, HttpServletRequest request) {
-        List<ReviewDto> reviews = reviewService.getReviewsByBusinessId(businessId);
+    public ResponseEntity<ApiResponseDto<List<ReviewDto>>> getReviewsByBusinessId(@PathVariable Long businessId, @RequestParam(required = false) String filter, HttpServletRequest request) {
+        List<ReviewDto> reviews = reviewService.getReviewsByBusinessId(businessId, filter);
         String message = reviews.isEmpty() ? "El negocio aún no tiene ninguna reseña" : "Reseñas encontradas exitosamente";
 
         return ApiResponseHelper.success(reviews, message, request.getRequestURI());
@@ -62,8 +62,8 @@ public class ReviewController {
 
     // Obtener todas las reseñas de un usuario
     @GetMapping("users/{userId}")
-    public ResponseEntity<ApiResponseDto<List<ReviewDto>>> getReviewsByUserId(@PathVariable Long userId, HttpServletRequest request) {
-        List<ReviewDto> reviews = reviewService.getReviewsByUserId(userId);
+    public ResponseEntity<ApiResponseDto<List<ReviewDto>>> getReviewsByUserId(@PathVariable Long userId, @RequestParam(required = false) String filter, HttpServletRequest request) {
+        List<ReviewDto> reviews = reviewService.getReviewsByUserId(userId, filter);
         String message = reviews.isEmpty() ? "El usuario aún no ha creado ninguna reseña" : "Reseñas encontradas exitosamente";
 
         return ApiResponseHelper.success(reviews, message, request.getRequestURI());
@@ -74,9 +74,9 @@ public class ReviewController {
 
 
     //Todo:
+    // Añadir filtros a los reviews por antigüedad, nuevos, mis reviews, etc.
     // crear el DTO de user
     // Añadir validaciones al DTO user
     // Crear el service de users
-    // Añadir filtros a los reviews por antigüedad, nuevos, mis reviews, etc.
-
+    // Crear el CRUD del user
 }
